@@ -1,0 +1,43 @@
+package com.keyin;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+
+public class SuggestionEngineTest {
+
+    @Test //Testing suggestion generation for a correct word.
+    public void testCorrectWordSuggestion() throws URISyntaxException, IOException {
+
+        SuggestionEngine suggestionEngine = new SuggestionEngine();
+        suggestionEngine.loadDictionaryData(Paths.get( ClassLoader.getSystemResource("words.txt").toURI()));
+
+        String suggestions = suggestionEngine.generateSuggestions("apple");
+
+        Assertions.assertEquals("", suggestions, "No suggestions should be generated for a correct word.");
+    }
+
+    @Test //Testing suggestion generation for an incorrect word.
+    public void testIncorrectWordSuggestion() throws URISyntaxException, IOException {
+        SuggestionEngine suggestionEngine = new SuggestionEngine();
+        suggestionEngine.loadDictionaryData(Paths.get( ClassLoader.getSystemResource("words.txt").toURI()));
+
+
+        String suggestions = suggestionEngine.generateSuggestions("aple");
+
+        Assertions.assertTrue(!suggestions.isEmpty(), "Suggestions should generated for an incorrect word.");
+    }
+
+    @Test
+    public void testCommonMisspelledWordSuggestion() throws URISyntaxException, IOException {
+        SuggestionEngine suggestionEngine = new SuggestionEngine();
+        suggestionEngine.loadDictionaryData(Paths.get( ClassLoader.getSystemResource("words.txt").toURI()));
+
+        String suggestions = suggestionEngine.generateSuggestions("recieve");
+
+        Assertions.assertTrue(!suggestions.isEmpty(), "Suggestions should be generated for a common misspelled word.");
+    }
+}
