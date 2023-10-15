@@ -1,0 +1,26 @@
+name: Maven-testing
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: check-out-repo
+        uses: actions/checkout@v2
+    
+      - name: setup-JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '20'
+          distribution: 'adopt'
+    
+      - name: build-with-maven
+        run: mvn -B clean install
+    
+      - name: run-tests
+        run: mvn test
